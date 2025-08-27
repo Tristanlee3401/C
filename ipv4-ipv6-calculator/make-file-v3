@@ -1,0 +1,36 @@
+CC = gcc
+CFLAGS = -Wall -g
+TARGET = ipv4-subnet-calc-v3
+SRC = ipv4-subnet-calc-v3.c
+OBJ = $(SRC:.c=.o)
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(CC) $(OBJ) -o $(TARGET)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(TARGET) $(OBJ)
+
+test: $(TARGET)
+	@echo "Running tests..."
+	./$(TARGET) 192.168.1.100 /24
+	@echo "------------------------"
+	./$(TARGET) -b 192.168.1.100 255.255.255.0
+	@echo "------------------------"
+	./$(TARGET) 11000000.10101000.00000001.01100100 /24
+	@echo "------------------------"
+	./$(TARGET) 192.168.1.100
+	@echo "------------------------"
+	./$(TARGET) -b 0xc0a80d17 0xffff0000
+	@echo "------------------------"
+	./$(TARGET) 0xgggggg
+	@echo "------------------------"
+	./$(TARGET) 192.168.1.100 0xff00ff00
+	@echo "------------------------"
+	./$(TARGET) 0x12345678 /24
+
+.PHONY: all clean test

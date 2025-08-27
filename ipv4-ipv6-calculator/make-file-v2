@@ -1,0 +1,44 @@
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 -O2
+TARGET = ipv4-subnet-calc-v2
+SOURCE = ipv4-subnet-calc-v2.c
+
+# Default target
+all: $(TARGET)
+
+# Build the executable
+$(TARGET): $(SOURCE)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
+
+# Clean build artifacts
+clean:
+	rm -f $(TARGET)
+
+# Install to /usr/local/bin (requires sudo)
+install: $(TARGET)
+	sudo cp $(TARGET) /usr/local/bin/
+	sudo chmod +x /usr/local/bin/$(TARGET)
+
+# Uninstall from /usr/local/bin (requires sudo)
+uninstall:
+	sudo rm -f /usr/local/bin/$(TARGET)
+
+# Run tests with your examples and new binary features
+test: $(TARGET)
+	@echo "Testing with your original examples:"
+	@echo "1. 192.168.13.23 with 255.255.0.0"
+	@./$(TARGET) 192.168.13.23 255.255.0.0
+	@echo "\n2. 130.194.77.37 with 0xfffffe00"
+	@./$(TARGET) 130.194.77.37 0xfffffe00
+	@echo "\n3. 130.194.66.77 with /26"
+	@./$(TARGET) 130.194.66.77 /26
+	@echo "\n\nTesting binary input features:"
+	@echo "4. Binary IP with CIDR notation (with -b flag)"
+	@./$(TARGET) -b 11000000.10101000.00001101.00010111 /16
+	@echo "\n5. Decimal IP with binary netmask"
+	@./$(TARGET) -b 192.168.1.100 11111111.11111111.11111111.00000000
+	@echo "\n6. Binary IP (32-bit) with hex netmask"
+	@./$(TARGET) -b 11000000101010000000000101100100 0xffffff00
+
+.PHONY: all clean install uninstall test

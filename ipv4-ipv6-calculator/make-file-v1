@@ -1,0 +1,37 @@
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 -O2
+TARGET = ipv4-subnet-calc-v1.c
+SOURCE = ipv4-subnet-calc-v1.c
+
+# Default target
+all: $(TARGET)
+
+# Build the executable
+$(TARGET): $(SOURCE)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
+
+# Clean build artifacts
+clean:
+	rm -f $(TARGET)
+
+# Install to /usr/local/bin (requires sudo)
+install: $(TARGET)
+	sudo cp $(TARGET) /usr/local/bin/
+	sudo chmod +x /usr/local/bin/$(TARGET)
+
+# Uninstall from /usr/local/bin (requires sudo)
+uninstall:
+	sudo rm -f /usr/local/bin/$(TARGET)
+
+# Run tests with your examples
+test: $(TARGET)
+	@echo "Testing with your examples:"
+	@echo "1. 192.168.13.23 with 255.255.0.0"
+	@./$(TARGET) 192.168.13.23 255.255.0.0
+	@echo "\n2. 130.194.77.37 with 0xfffffe00"
+	@./$(TARGET) 130.194.77.37 0xfffffe00
+	@echo "\n3. 130.194.66.77 with /26"
+	@./$(TARGET) 130.194.66.77 /26
+
+.PHONY: all clean install uninstall test
