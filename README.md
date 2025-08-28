@@ -1,5 +1,5 @@
 # network-analysis-tools
-Network-analysis tools from the command line
+Network analysis tools from the command line
 
 <pre>
 /network-analysis-tools
